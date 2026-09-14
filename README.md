@@ -21,7 +21,7 @@ A high-level summary view designed for business stakeholders to track daily oper
 * **Key KPIs:** Net Sales (₹178.60K), Net Profit (₹75.45K), Profit Margin (42.2%), and Return Rate (23.8%).
 * **Visuals:** Monthly revenue & profit margin trends, sales share by channel, top 5 revenue-generating products, and key business takeaway notes.
 
-![Executive Overview](E:\Power BI\Retail_PowerBI_Project\page1_Overview.png)
+![Executive Overview](page1_Overview.png)
 
 ---
 
@@ -31,7 +31,7 @@ A diagnostic page built to identify which products and channels drive profitabil
 * **Discount vs Margin Scatter Plot:** Flags over-discounted items that fall below target margin thresholds.
 * **AOV by Sales Channel:** Highlights basket size variation across channels (Website at ₹6.86K, Mobile App at ₹5.76K, and Amazon at ₹3.92K).
 
-![Category & Channel Deep Dive](E:\Power BI\Retail_PowerBI_Project\page2_deep_dive.png)
+![Category & Channel Deep Dive](page2_deep_dive.png)
 
 ---
 
@@ -41,7 +41,7 @@ Focuses on reverse logistics and post-purchase customer experience.
 * **Return Reasons:** **70% of total returns** are caused by **Sizing/Fit Issues** in the Apparel category, driving **₹17.55K** in returned value.
 * **Trend Over Time:** Tracks return quantities by month to monitor seasonal return volume.
 
-![Logistics & Returns](E:\Power BI\Retail_PowerBI_Project\page3_logistics.png)
+![Logistics & Returns](page3_logistics.png)
 
 ---
 
