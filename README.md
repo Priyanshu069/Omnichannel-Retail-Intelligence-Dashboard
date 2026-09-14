@@ -4,6 +4,16 @@ A 3-page Power BI reporting suite analyzing sales performance, margin health, ch
 
 ---
 
+## Repository Structure
+
+```text
+├── Omnichannel_retail_dashboard.pbix   # Main Power BI Desktop file
+├── README.md                           # Project documentation and analysis breakdown
+├── page1_Overview.png                  # Executive overview dashboard visual
+├── page2_deep_dive.png                 # Category and channel diagnostic visual
+└── page3_logistics.png                 # Logistics and returns breakdown visual
+
+
 ## Project Overview
 
 In this project, I worked with omnichannel retail transaction data to solve three practical operational and commercial questions:
