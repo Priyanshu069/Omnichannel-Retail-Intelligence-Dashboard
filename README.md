@@ -1,40 +1,74 @@
-# Omnichannel Retail Performance & Logistics Intelligence Dashboard
+# Omnichannel Retail Analytics & Profitability Dashboard (Power BI)
 
-A 3-page interactive Power BI dashboard tracking sales profitability, discount efficiency, and return rates across Website, Mobile App, and Amazon storefronts.
-
----
-
-## 📌 Executive Summary & Business Problem
-* **Business Challenge:** A multi-channel retail brand experienced margin compression despite growing top-line sales, driven by marketplace promotional discounts and an overall return rate of 23.8%.
-* **Objective:** Deliver an end-to-end reporting suite enabling leadership to track margin health, evaluate channel profitability, and isolate reverse logistics drivers.
+A 3-page Power BI reporting suite analyzing sales performance, margin health, channel profitability, and return root causes across Website, Mobile App, and Amazon Storefront.
 
 ---
 
-## 📊 Dashboard Views
+## Project Overview
 
-### 1. Executive Overview
-Tracks overall financial health, sales contribution across channels (Website, App, Amazon), and Top 5 revenue-generating products.
-![Executive Overview](page1_overview.png)
+In this project, I worked with omnichannel retail transaction data to solve three practical operational and commercial questions:
 
-### 2. Category & Channel Deep-Dive
-Evaluates promotional discount elasticity and Average Order Value (AOV) across sales channels to optimize pricing strategy.
-![Category Deep-Dive](page2_deepdive.png)
-
-### 3. Logistics & Reverse Supply Chain
-Isolates unit loss and product returns by category and root cause.
-![Logistics and Returns](page3_logistics.png)
+1. **Margin Dilution:** Overall sales looked strong, but margins in certain categories were dropping due to inconsistent discounting.
+2. **Channel Performance Gap:** Amazon sales were lagging behind DTC channels (Website & Mobile App). I analysed channel-level Average Order Value (AOV) to understand whether the gap was driven by demand or basket size.
+3. **Return Spike:** Product return rate reached **23.8%**. The operations team needed to verify if delivery delays were causing cancellations/returns, or if product-level defects were responsible.
 
 ---
 
-## 💡 Strategic Business Insights & Takeaways
-* **Apparel Sizing Risk:** Sizing/Fit issues drive 70% of all product returns, pushing the Apparel return rate to 47.6%. Improving sizing guides and fit tools will directly reduce return operational overhead.
-* **Channel AOV Disparity:** The Website generates the highest AOV (₹6.9K), whereas Amazon yields ₹3.9K due to promotional discounting. Ad spend should prioritize direct-to-consumer channels.
-* **Margin Anchors:** Electronics and Home & Living maintain strong profitability (>40% margin) with baseline zero-return rates, providing consistent bottom-line stability.
+## Dashboard Walkthrough
+
+### Page 1: Executive Overview
+A high-level summary view designed for business stakeholders to track daily operations and financial trajectory.
+* **Key KPIs:** Net Sales (₹178.60K), Net Profit (₹75.45K), Profit Margin (42.2%), and Return Rate (23.8%).
+* **Visuals:** Monthly revenue & profit margin trends, sales share by channel, top 5 revenue-generating products, and key business takeaway notes.
+
+![Executive Overview](E:\Power BI\Retail_PowerBI_Project\page1_Overview.png)
 
 ---
 
-## 🛠️ Technical Implementation
-* **Tool:** Microsoft Power BI Desktop
-* **Data Modeling:** Star Schema architecture with clean 1-to-many dimensional relationships.
-* **DAX Formulas:** Dynamic Outlier Labeling, Margin %, Return Rate % with baseline zero-handling, and Channel AOV calculations.
-* **Visuals & Design:** KPI callout cards, dual-axis trend analysis, scatter plots for discount elasticity, and cross-report synchronized slicers.
+### Page 2: Category & Channel Deep-Dive
+A diagnostic page built to identify which products and channels drive profitability versus margin leakage.
+* **Financial Waterfall Matrix:** Breaks down Gross Sales -> Discounts -> Net Sales -> COGS -> Net Profit -> Margin % by category.
+* **Discount vs Margin Scatter Plot:** Flags over-discounted items that fall below target margin thresholds.
+* **AOV by Sales Channel:** Highlights basket size variation across channels (Website at ₹6.86K, Mobile App at ₹5.76K, and Amazon at ₹3.92K).
+
+![Category & Channel Deep Dive](E:\Power BI\Retail_PowerBI_Project\page2_deep_dive.png)
+
+---
+
+### Page 3: Logistics & Returns Analysis
+Focuses on reverse logistics and post-purchase customer experience.
+* **Delivery Performance:** Average delivery turnaround is **2.77 days**, confirming fast logistics across delivery hubs and ruling out shipping delays as the cause of returns.
+* **Return Reasons:** **70% of total returns** are caused by **Sizing/Fit Issues** in the Apparel category, driving **₹17.55K** in returned value.
+* **Trend Over Time:** Tracks return quantities by month to monitor seasonal return volume.
+
+![Logistics & Returns](E:\Power BI\Retail_PowerBI_Project\page3_logistics.png)
+
+---
+
+## Data Model & Architecture
+
+The report is built on a clean **Star Schema** to ensure fast query performance and reliable filter propagation:
+
+* **Fact Tables:** 
+  * `fact_orders` (transactions, unit prices, discounts, quantities)
+  * `fact_returns` (return dates, returned quantities, return reasons, restocking fees)
+* **Dimension Tables:** 
+  * `dimProducts` (SKUs, categories, unit costs, retail prices)
+  * `dim_customers` (customer segments)
+  * `dim_geography` (cities, regions, delivery hubs)
+  * `dim_date` (calendar master)
+
+### Data Modeling Challenge: Relationship Ambiguity
+Connecting `dim_date` to both `fact_orders` and `fact_returns` created multiple active paths back to `dimProducts`, triggering a circular dependency error in Power BI.
+
+To fix this:
+* Kept the primary relationship between `dim_date` and `fact_orders` active.
+* Set the relationship between `dim_date[Date]` and `fact_returns[Return_Date]` as **Inactive**.
+* Activated the inactive path dynamically inside DAX measures using `USERELATIONSHIP`:
+
+```dax
+Total Units Returned = 
+CALCULATE(
+    SUM('fact_returns'[Returned_Quantity]),
+    USERELATIONSHIP('dim_date'[Date], 'fact_returns'[Return_Date])
+)
