@@ -2,8 +2,6 @@
 
 A 3-page Power BI reporting suite analyzing sales performance, margin health, channel profitability, and return root causes across Website, Mobile App, and Amazon Storefront.
 
----
-
 ## Repository Structure
 
 ```text
@@ -12,7 +10,7 @@ A 3-page Power BI reporting suite analyzing sales performance, margin health, ch
 ├── page1_Overview.png                  # Executive overview dashboard visual
 ├── page2_deep_dive.png                 # Category and channel diagnostic visual
 └── page3_logistics.png                 # Logistics and returns breakdown visual
-
+```
 
 ## Project Overview
 
@@ -82,3 +80,4 @@ CALCULATE(
     SUM('fact_returns'[Returned_Quantity]),
     USERELATIONSHIP('dim_date'[Date], 'fact_returns'[Return_Date])
 )
+```
